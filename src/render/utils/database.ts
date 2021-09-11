@@ -1,5 +1,10 @@
 import Dexie from 'dexie';
+import {Dir} from "@/render/model";
+
 export class Database extends Dexie {
+
+    imgs
+    errorLog
 
     constructor() {
         super('database');
@@ -14,31 +19,31 @@ export class Database extends Dexie {
 
     }
 
-    bulkImg (items) {
+    bulkImg(items: Array<Dir>) {
         return this.imgs.bulkAdd(items)
     }
 
-    updateDownload (key, download) {
-        return this.imgs.update(key, { download })
+    // updateDownload (key, download) {
+    //     return this.imgs.update(key, { download })
+    // }
+
+    getImgsDownNum(dirId: number, flag: string) {
+        return this.imgs.where({dirId, download: flag}).count()
     }
 
-    getImgsDownNum (dirId, flag) {
-        return this.imgs.where({ dirId, download: flag }).count()
-    }
-
-    getImgs (query) {
+    getImgs(query: object) {
         return this.imgs.where(query).toArray()
     }
 
-    addErrorlog (item) {
-        return this.errorLog.add(item)
-    }
+    // addErrorlog (item) {
+    //     return this.errorLog.add(item)
+    // }
 
-    getAllErrorLog () {
+    getAllErrorLog() {
         return this.errorLog.reverse().sortBy('keys')
     }
 
-    deleteAllErrorLog () {
+    deleteAllErrorLog() {
         return this.errorLog.clear()
     }
 }
