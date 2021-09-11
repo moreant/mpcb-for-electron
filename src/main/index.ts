@@ -8,6 +8,7 @@ function bootstrap() {
   win = new BrowserWindow({
     webPreferences: {
       preload: path.join(__dirname, '../preload/index.js'),
+      webSecurity: false
     },
   })
 
