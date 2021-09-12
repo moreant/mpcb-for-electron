@@ -1,6 +1,7 @@
 import path from 'path'
 import { app, BrowserWindow } from 'electron'
 import { register } from './communication'
+import {registerDownloadService } from '@/main/downlad'
 
 let win: BrowserWindow | null = null
 
@@ -19,6 +20,8 @@ function bootstrap() {
     win.webContents.openDevTools()
     win.loadURL(`http://localhost:${process.env.PORT}`)
   }
+
+  registerDownloadService()
 
   // something init setup
   register(win)

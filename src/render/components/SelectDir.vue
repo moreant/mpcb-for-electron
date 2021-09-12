@@ -3,10 +3,10 @@ import {ref, defineEmits, watchEffect} from "vue";
 import dayjs from 'dayjs'
 import {getDir, getIcon, getList, downImg} from "../api/index";
 import {Database, IS_DOWNLOAD, NO_DOWNLOAD} from '../utils/database'
-import {bufferToBase64Img, isMock} from '../utils/helper'
 import BaseStep from './BaseStep.vue'
 import Dialog from './Dialog.vue'
 import {Album, Dir} from "@/render/model";
+import {GET_DOWNLOADS_PATH, OPEN_FILE_DIALOG} from "@/common/constant/event";
 
 const props = defineProps({
   token: {
@@ -48,12 +48,12 @@ watchEffect(async () => {
 
 
 const deleteImgLog = async () => {
-  // const dirId = selectId.value
-  // const dbImg = await database.getImgs({ dirId })
-  // await Promise.all(dbImg.map(item => database.updateDownload(item.id, NO_DOWNLOAD)))
-  // getImgList(dirId)
-  // getDirById(dirId).downNum = 0
-  // open.value = false
+  const dirId = selectId.value
+  const dbImg = await database.getImgs({ dirId })
+  await Promise.all(dbImg.map(item => database.updateDownload(item.id, NO_DOWNLOAD)))
+  getImgList(dirId)
+  getDirById(dirId)!.downNum = 0
+  open.value = false
 }
 
 const getImgList = async (dirId: number) => {
@@ -79,32 +79,42 @@ const getImgList = async (dirId: number) => {
 
   document.getElementById('downloadList')!.parentElement!.style.maxHeight =
       document.getElementById('selectList')!.parentElement!.offsetHeight + 'px'
-
 }
 
-const onDownImg = async (dirId: string) => {
-  // let dbImg = await database.getImgs({ dirId, download: NO_DOWNLOAD })
-  // loading.value = true
-  // for (let index = 0; index < dbImg.length; index++) {
-  //   const item = dbImg[index]
-  //   try {
-  //     await downImg(props.token, dirId, item.url, item.fileName)
-  //     await database.updateDownload(item.id, IS_DOWNLOAD)
-  //     try {
-  //       imgList.value.find(img => img.id === item.id).download = IS_DOWNLOAD
-  //     } catch (e) { console.log(e); }
-  //     const dir = getDirById(dirId)
-  //     dir.downNum = ++dir.downNum
-  //   } catch (e) {
-  //     database.addErrorlog({
-  //       dirId,
-  //       time: dayjs().format('M-D HH:mm:ss'),
-  //       msg: e.message
-  //     })
-  //     emit('error')
-  //   }
-  // }
-  // loading.value = false
+
+const onDownImg = async (dirId: number) => {
+  let downloadDir = await window.ipcRenderer.invoke(GET_DOWNLOADS_PATH)
+  const path = await window.ipcRenderer.invoke(OPEN_FILE_DIALOG, downloadDir)
+  if (path.length > 0) {
+    downloadDir = path[0]
+  }
+
+  let dbImg = await database.getImgs({dirId, download: NO_DOWNLOAD})
+  loading.value = true
+  for (let index = 0; index < dbImg.length; index++) {
+    const item = dbImg[index]
+    try {
+      const downDir = getDirById(dirId)
+      await downImg(`${downloadDir}/${dirId}-${downDir!.dirName}`, item.url, item.fileName)
+      await database.updateDownload(item.id, IS_DOWNLOAD)
+      try {
+        imgList.value.find(img => img.id === item.id)!.download = IS_DOWNLOAD
+      } catch (e) {
+        console.log(e);
+      }
+      const dir = getDirById(dirId)
+      dir!.downNum = ++dir!.downNum
+    } catch (e: any) {
+      database.addErrorlog({
+        dirId,
+        time: dayjs().format('M-D HH:mm:ss'),
+        msg: e.message
+      })
+      emit('error')
+      throw e
+    }
+  }
+  loading.value = false
 }
 
 const onDelete = (value: boolean) => {

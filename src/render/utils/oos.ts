@@ -1,7 +1,6 @@
 // @ts-ignore
 import OSS from "ali-oss";
 import {Sig} from "@/render/model";
-import * as url from "url";
 
 class OOS {
     client: OSS
@@ -18,9 +17,10 @@ class OOS {
         }
     }
 
-    downImg = async (url: string, saveUrl: string) => {
-        await this.client.get(url, saveUrl);
-    }
+    downImg = (url: string, saveUrl: string) => this.client.get(url, saveUrl);
+
+    getBuffer = (url: string) => this.client.get(url)
+
 
     getUrl = (url: string) => this.client.signatureUrl(url)
 

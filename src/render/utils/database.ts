@@ -23,9 +23,9 @@ export class Database extends Dexie {
         return this.imgs.bulkAdd(items)
     }
 
-    // updateDownload (key, download) {
-    //     return this.imgs.update(key, { download })
-    // }
+    updateDownload(key: number, download: '0' | '1') {
+        return this.imgs.update(key, {download})
+    }
 
     getImgsDownNum(dirId: number, flag: string) {
         return this.imgs.where({dirId, download: flag}).count()
@@ -35,9 +35,9 @@ export class Database extends Dexie {
         return this.imgs.where(query).toArray()
     }
 
-    // addErrorlog (item) {
-    //     return this.errorLog.add(item)
-    // }
+    addErrorlog (item:object) {
+        return this.errorLog.add(item)
+    }
 
     getAllErrorLog() {
         return this.errorLog.reverse().sortBy('keys')
