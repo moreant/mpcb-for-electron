@@ -1,6 +1,6 @@
 <script setup>
 import ExtraLink from './ExtraLink.vue'
-import { isMock } from '../utils/helper'
+import {openExtraLink} from '@/render/utils/helper'
 
 </script>
 
@@ -23,11 +23,13 @@ import { isMock } from '../utils/helper'
     <div class="flex flex-col lg:flex-row w-full justify-between">
       <div class="text-base lg:text-3xl">简洁高效的批量下载魅族云相册中的图片。</div>
       <a
-        href="https://github.com/moreant/mpcb"
-        target="_blank"
-        class="btn-link text-base lg:text-3xl text-white"
-        >使用文档 <extra-link class="w-4 lg:w-5 h-6 inline"
-      /></a>
+          @click="openExtraLink('https://github.com/moreant/mpcb')"
+          target="_blank"
+          class="btn-link text-base lg:text-3xl text-white cursor-pointer"
+      >使用文档
+        <extra-link class="w-4 lg:w-5 h-6 inline"
+        />
+      </a>
     </div>
   </div>
 </template>

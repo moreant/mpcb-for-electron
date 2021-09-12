@@ -11,6 +11,8 @@ export const LOGIN = '@event/login'
 /** 切换开发者工具 */
 export const TOGGLE_DEVTOOLS = 'toggle-devtools'
 
+export const OPEN_LINK = 'OPEN_LINK'
+
 export const GET_DOWNLOADS_PATH = 'GET_DOWNLOADS_PATH'
 
 export const OPEN_FILE_DIALOG = 'OPEN_FILE_DIALOG'

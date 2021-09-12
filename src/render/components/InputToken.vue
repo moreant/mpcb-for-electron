@@ -4,6 +4,7 @@ import Cookies from 'js-cookie'
 import dayjs from 'dayjs'
 import BaseStep from './BaseStep.vue'
 import ExtraLink from './ExtraLink.vue'
+import {openExtraLink} from "@/render/utils/helper";
 
 import {getInfo} from "../api";
 
@@ -54,9 +55,9 @@ if (token.value) {
         <button @click="onSubmit" class="btn btn-primary">提交</button>
       </div>
       <div>
-        <a href="http://topurl.cn/809" target="_blank" class="btn btn-link p-0"
-          >获取 Token ?
-          <extra-link />
+        <a @click="openExtraLink('http://topurl.cn/809')" class="btn btn-link p-0"
+        >获取 Token ?
+          <extra-link/>
         </a>
       </div>
     </template>

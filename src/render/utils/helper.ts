@@ -1,12 +1,7 @@
-const bufferToBase64Img = (buffer: any) => {
-  let binary = ''
-  const bytes = new Uint8Array(buffer)
-  for (let i = 0; i < bytes.byteLength; i++) {
-    binary += String.fromCharCode(bytes[i])
-  }
-  return 'data:image/jpeg;base64,' + window.btoa(binary)
+import {OPEN_LINK} from "@/common/constant/event";
+
+const openExtraLink = async (link: string) => {
+    await window.ipcRenderer.invoke(OPEN_LINK, link)
 }
 
-const isMock = false
-
-export { bufferToBase64Img, isMock }
+export {openExtraLink}
