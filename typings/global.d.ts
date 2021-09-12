@@ -11,7 +11,6 @@ interface Window {
   removeLoading: () => void
   /** NodeJs fs */
   fs: typeof import('fs')
-  os: typeof import('os')
   /** Electron ipcRenderer */
   ipcRenderer: import('electron').IpcRenderer
 }

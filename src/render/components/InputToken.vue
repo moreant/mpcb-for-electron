@@ -1,20 +1,20 @@
-<script setup>
-import { ref, reactive } from "vue";
+<script setup lang="ts">
+import {ref, reactive} from "vue";
 import Cookies from 'js-cookie'
 import dayjs from 'dayjs'
 import BaseStep from './BaseStep.vue'
 import ExtraLink from './ExtraLink.vue'
 
-import { getInfo } from "../api";
+import {getInfo} from "../api";
 
-const token = ref(Cookies.get('token'));
+const token = ref<string>(Cookies.get('token')!);
 const result = reactive({
   time: '',
   msg: '',
   flag: 0
 })
 
-const onSubmit = async ()=>{
+const onSubmit = async () => {
   try {
     await getInfo(token.value);
     emit('change', token.value)
@@ -38,6 +38,7 @@ const emit = defineEmits(['change'])
 if (token.value) {
   onSubmit()
 }
+
 </script>
 
 <template>
@@ -45,10 +46,10 @@ if (token.value) {
     <template v-slot:left>
       <div class="flex space-x-2">
         <input
-          v-model="token"
-          type="text"
-          placeholder="token"
-          class="w-full input input-primary input-bordered"
+            v-model="token"
+            type="text"
+            placeholder="token"
+            class="w-full input input-primary input-bordered"
         />
         <button @click="onSubmit" class="btn btn-primary">提交</button>
       </div>
@@ -63,8 +64,8 @@ if (token.value) {
       <h2 class="card-title">
         运行结果
         <div
-          class="badge badge-lg"
-          :class="{
+            class="badge badge-lg"
+            :class="{
             'badge-success': result.flag === 1,
             'badge-error': result.flag === -1
           }"
