@@ -1,6 +1,6 @@
 {
   "name": "electron-vue",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "main": "dist/main/index.js",
   "author": "moreant",
   "license": "MIT",
@@ -13,7 +13,7 @@
     "build:render": "vite build",
     "build:preload": "node -r ts-node/register script/build-preload --env=production",
     "build:main": "node -r ts-node/register script/build-main --env=production",
-    "build": "rimraf dist && npm run build:render && npm run build:preload && npm run build:main && electron-builder"
+    "build": "rimraf dist && npm run build:render && npm run build:preload && npm run build:main"
   },
   "build": {
     "appId": "moreant/mpcb",
